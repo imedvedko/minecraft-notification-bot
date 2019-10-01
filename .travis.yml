@@ -1,1 +1,8 @@
 language: java
+
+deploy:
+  provider: releases
+  api_key: $GITHUB_TOKEN
+  file: "modules/plugin/target/plugin-jar-with-dependencies.jar"
+  skip_cleanup: true
+  draft: true

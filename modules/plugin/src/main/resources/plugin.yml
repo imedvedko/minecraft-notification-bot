@@ -1,3 +1,5 @@
 name: notification-bot-plugin
 main: com.imedvedev.minecraft.notification.bot.NotificationBotPlugin
 version: ${project.version}
+depend:
+  - AuthMe

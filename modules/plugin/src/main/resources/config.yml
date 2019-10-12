@@ -4,3 +4,6 @@ proxy:
 messenger.telegram:
   token: ""
   chats: [""]
+message:
+  joined: "joined the game"
+  left: "left the game"

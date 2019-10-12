@@ -2,7 +2,7 @@ package com.imedvedev.minecraft.notification.bot
 
 import com.google.inject.Guice
 import com.google.inject.Stage
-import com.imedvedev.minecraft.notification.bot.module.MessengerListenerModule
+import com.imedvedev.minecraft.notification.bot.module.NotificationEventListenerModule
 import com.imedvedev.minecraft.notification.bot.module.ProxyModule
 import com.imedvedev.minecraft.notification.bot.module.TelegramMessengerModule
 import org.bukkit.event.Listener
@@ -14,7 +14,9 @@ class NotificationBotPlugin : JavaPlugin() {
             .let { messengerConfig -> Guice.createInjector(Stage.PRODUCTION,
                 ProxyModule(config.getConfigurationSection("proxy")!!),
                 TelegramMessengerModule(messengerConfig.getConfigurationSection("telegram")!!),
-                MessengerListenerModule { server.onlinePlayers.map { it.name } }) }
+                NotificationEventListenerModule(
+                    config.getConfigurationSection("message")!!, server::getOnlinePlayers, logger
+                )) }
             .getInstance(Listener::class.java).let { server.pluginManager.registerEvents(it, this) }
     }
 }

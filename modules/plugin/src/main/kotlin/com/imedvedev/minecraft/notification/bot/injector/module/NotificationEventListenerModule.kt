@@ -4,6 +4,7 @@ import com.imedvedev.minecraft.notification.bot.listener.NotificationEventListen
 import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
 import org.koin.dsl.module
+import java.time.Duration
 
 val notificationEventListenerModule = module(true) {
     single<Listener> {
@@ -13,7 +14,8 @@ val notificationEventListenerModule = module(true) {
                 config.getString("left")!!,
                 get(),
                 plugin.server::getOnlinePlayers,
-                plugin.logger
+                plugin.logger,
+                Duration.parse(config.getString("quarantine")).toMillis()
             )
         } }
     }

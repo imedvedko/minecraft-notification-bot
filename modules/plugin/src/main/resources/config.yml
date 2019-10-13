@@ -7,3 +7,4 @@ messenger.telegram:
 message:
   joined: "joined the game"
   left: "left the game"
+  quarantine: PT15S

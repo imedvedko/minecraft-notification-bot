@@ -7,7 +7,7 @@
     <parent>
         <artifactId>parent</artifactId>
         <groupId>com.imedvedev.minecraft.notification.bot</groupId>
-        <version>1.1</version>
+        <version>1.2</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -17,16 +17,16 @@
         <dependency>
             <groupId>com.imedvedev.minecraft.notification.bot</groupId>
             <artifactId>listener</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>com.imedvedev.minecraft.notification.bot</groupId>
             <artifactId>telegram</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
+            <groupId>org.koin</groupId>
+            <artifactId>koin-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -51,19 +51,6 @@
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

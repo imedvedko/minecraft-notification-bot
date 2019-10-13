@@ -13,8 +13,7 @@ import org.bukkit.event.player.PlayerQuitEvent
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class NotificationEventListener(private val authMeApi: AuthMeApi,
-                                private val joinedMessage: String,
+class NotificationEventListener(private val joinedMessage: String,
                                 private val leftMessage: String,
                                 private val messenger: Messenger,
                                 private val onlinePlayers: () -> Iterable<Player>,
@@ -22,34 +21,33 @@ class NotificationEventListener(private val authMeApi: AuthMeApi,
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onJoin(event: PlayerJoinEvent) {
-        event.player.takeIf(authMeApi::isAuthenticated)
+        event.player.takeIf(AuthMeApi.getInstance()::isAuthenticated)
             ?.run { joinNotification() }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onQuit(event: PlayerQuitEvent) {
-        event.player.takeIf(authMeApi::isAuthenticated)
-            ?.run { leftNotification(onlinePlayers.invoke().filter { this != it }) }
+        event.player.takeIf(AuthMeApi.getInstance()::isAuthenticated)
+            ?.run { leftNotification(onlinePlayers().filter { this != it }) }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onLogin(event: LoginEvent) = event.player.joinNotification()
 
     @EventHandler(priority = EventPriority.MONITOR)
-    fun onLogout(event: LogoutEvent) = event.player.leftNotification(onlinePlayers.invoke())
+    fun onLogout(event: LogoutEvent) = event.player.leftNotification(onlinePlayers())
 
     private fun Player.joinNotification() {
-        notification(joinedMessage, onlinePlayers.invoke())
+        notification(joinedMessage, onlinePlayers())
     }
 
     private fun Player.leftNotification(onlinePlayers: Iterable<Player>) {
         notification(leftMessage, onlinePlayers)
     }
 
-    private fun Player.notification(message: String, onlinePlayers: Iterable<Player>) = messenger.send(
-        "<b>$name $message</b>" +
-            "\nOnline players: ${onlinePlayers.filter(authMeApi::isAuthenticated).map { "<i>${it.name}</i>" }}"
-    ).forEach { result ->
-        result.invokeOnCompletion { e -> e?.let { logger.log(Level.WARNING, "Can not send message", it) } }
-    }
+    private fun Player.notification(message: String, onlinePlayers: Iterable<Player>) = onlinePlayers
+        .filter(AuthMeApi.getInstance()::isAuthenticated).map { "<i>${it.name}</i>" }
+        .let { messenger.send("<b>$name $message</b>\nOnline players: $it").forEach { result ->
+            result.invokeOnCompletion { e -> e?.let { logger.log(Level.WARNING, "Can not send message", it) } }
+        } }
 }

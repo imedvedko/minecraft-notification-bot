@@ -1,14 +1,10 @@
 language: java
 
-before_deploy:
-  - git config --local user.name "Ilya Medvedev"
-  - git config --local user.email "medved55rus@gmail.com"
-  - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
-  - git tag $TRAVIS_TAG
 deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
   file: "modules/plugin/target/plugin-jar-with-dependencies.jar"
   skip_cleanup: true
   overwrite: true
-  prerelease: true
+  on:
+    tags: true

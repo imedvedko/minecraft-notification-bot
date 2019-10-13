@@ -48,7 +48,7 @@ class NotificationEventListener(private val joinedMessage: String,
 
     private fun Player.joinNotification() {
         if (quarantine.remove(name) == null) {
-            notification(joinedMessage, onlinePlayers())
+            notification(joinedMessage)
         }
     }
 
@@ -58,12 +58,12 @@ class NotificationEventListener(private val joinedMessage: String,
         GlobalScope.launch {
             delay(quarantineDelayMillis)
             if (quarantine.remove(name, quarantineId)) {
-                notification(leftMessage, onlinePlayers())
+                notification(leftMessage)
             }
         }
     }
 
-    private fun Player.notification(message: String, onlinePlayers: Iterable<Player>) = onlinePlayers
+    private fun Player.notification(message: String) = onlinePlayers()
         .filter(AuthMeApi.getInstance()::isAuthenticated).map { "<i>${it.name}</i>" }
         .let { messenger.send("<b>$name $message</b>\nOnline players: $it") }.forEach { job ->
             job.invokeOnCompletion { e -> e?.let { logger.log(Level.WARNING, "Can not send message", it) } }

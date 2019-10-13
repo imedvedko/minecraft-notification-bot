@@ -28,22 +28,22 @@ class NotificationEventListener(private val joinedMessage: String,
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onJoin(event: PlayerJoinEvent) {
-        event.player.takeIf(AuthMeApi.getInstance()::isAuthenticated)?.run { joinNotification() }
+        event.player.takeIf(AuthMeApi.getInstance()::isAuthenticated)?.joinNotification()
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onQuit(event: PlayerQuitEvent) {
-        event.player.takeIf(AuthMeApi.getInstance()::isAuthenticated)?.run { leftNotification() }
+        event.player.takeIf(AuthMeApi.getInstance()::isAuthenticated)?.leftNotification()
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onLogin(event: LoginEvent) {
-        event.player.run { takeIf { isOnline }?.joinNotification() }
+        event.player.takeIf(Player::isOnline)?.joinNotification()
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onLogout(event: LogoutEvent) {
-        event.player.run { takeIf { isOnline }?.leftNotification() }
+        event.player.takeIf(Player::isOnline)?.leftNotification()
     }
 
     private fun Player.joinNotification() {
@@ -65,7 +65,7 @@ class NotificationEventListener(private val joinedMessage: String,
 
     private fun Player.notification(message: String, onlinePlayers: Iterable<Player>) = onlinePlayers
         .filter(AuthMeApi.getInstance()::isAuthenticated).map { "<i>${it.name}</i>" }
-        .let { messenger.send("<b>$name $message</b>\nOnline players: $it").forEach { result ->
-            result.invokeOnCompletion { e -> e?.let { logger.log(Level.WARNING, "Can not send message", it) } }
-        } }
+        .let { messenger.send("<b>$name $message</b>\nOnline players: $it") }.forEach { job ->
+            job.invokeOnCompletion { e -> e?.let { logger.log(Level.WARNING, "Can not send message", it) } }
+        }
 }

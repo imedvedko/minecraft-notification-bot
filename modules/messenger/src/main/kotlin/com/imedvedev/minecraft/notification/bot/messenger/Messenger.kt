@@ -1,7 +1,7 @@
 package com.imedvedev.minecraft.notification.bot.messenger
 
-import kotlinx.coroutines.Job
+import java.util.concurrent.CompletableFuture
 
 interface Messenger {
-    fun send(message: String): List<Job>
+    fun send(message: String): List<CompletableFuture<Unit>>
 }

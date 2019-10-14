@@ -13,10 +13,4 @@
 
     <artifactId>messenger</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.jetbrains.kotlinx</groupId>
-            <artifactId>kotlinx-coroutines-core</artifactId>
-        </dependency>
-    </dependencies>
 </project>

@@ -6,17 +6,17 @@ import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.model.request.ParseMode
 import com.pengrad.telegrambot.request.SendMessage
 import com.pengrad.telegrambot.response.SendResponse
-import kotlinx.coroutines.Job
 import java.io.IOException
+import java.util.concurrent.CompletableFuture
 
 class TelegramMessenger(private val bot: TelegramBot, private val chats: Iterable<String>) : Messenger {
 
-    override fun send(message: String): List<Job> = chats.map { chat ->
-        Job().apply {
+    override fun send(message: String): List<CompletableFuture<Unit>> = chats.map { chat ->
+        CompletableFuture<Unit>().apply {
             object : Callback<SendMessage, SendResponse> {
                 override fun onResponse(request: SendMessage, response: SendResponse) {
                     if (response.isOk) {
-                        complete()
+                        complete(Unit)
                     } else {
                         completeExceptionally(TelegramMessengerException(response.errorCode(), response.description()))
                     }

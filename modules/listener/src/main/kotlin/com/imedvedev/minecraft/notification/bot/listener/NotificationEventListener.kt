@@ -15,7 +15,6 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.logging.Level
 import java.util.logging.Logger
 
-
 class NotificationEventListener(private val joinedMessage: String,
                                 private val leftMessage: String,
                                 private val onlineMessage: String,
@@ -55,10 +54,13 @@ class NotificationEventListener(private val joinedMessage: String,
     private fun Player.leftNotification() {
         val quarantineId = UUID.randomUUID()
         quarantine[name] = quarantineId
-        onlinePlayers().filter { this != it }.filter(authMeApi::isAuthenticated).map(Player::getName).let {
+        onlinePlayers().filter { this != it }.filter(authMeApi::isAuthenticated).let { onlinePlayers ->
             quarantineScheduler.invoke {
                 if (quarantine.remove(name, quarantineId)) {
-                    notification(leftMessage, it)
+                    onlinePlayers.plus(onlinePlayers().filter(authMeApi::isAuthenticated))
+                        .map(Player::getName)
+                        .distinct()
+                        .let { onlinePlayers -> notification(leftMessage, onlinePlayers) }
                 }
             }
         }

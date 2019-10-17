@@ -14,11 +14,10 @@ val notificationEventListenerModule = module(true) {
                 config.getString("left")!!,
                 config.getString("online")!!,
                 get(),
-                plugin.server::getOnlinePlayers,
                 AuthMeApi.getInstance(),
                 plugin.logger,
-                config.getLong("leftMessageQuarantineInTicks").let { delay ->
-                    { task: () -> Unit -> plugin.server.scheduler.runTaskLater(plugin, task, delay).let { Unit } }
+                config.getLong("leftMessageQuarantineInTicks").let<Long, (() -> Unit) -> Unit> { delay ->
+                   { task -> plugin.server.scheduler.runTaskLater(plugin, task, delay) }
                 }
             )
         } }

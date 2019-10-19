@@ -7,7 +7,7 @@
     <parent>
         <artifactId>vendor</artifactId>
         <groupId>com.imedvedev.minecraft.notification.bot</groupId>
-        <version>1.7-SNAPSHOT</version>
+        <version>1.7</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -17,7 +17,7 @@
         <dependency>
             <groupId>com.imedvedev.minecraft.notification.bot</groupId>
             <artifactId>messenger</artifactId>
-            <version>1.7-SNAPSHOT</version>
+            <version>1.7</version>
         </dependency>
         <dependency>
             <groupId>com.github.pengrad</groupId>

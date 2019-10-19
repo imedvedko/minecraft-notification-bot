@@ -5,7 +5,21 @@ messenger.telegram:
   token: ""
   chats: [""]
 message:
+  started: "Server has been started"
   joined: "joined the game"
   left: "left the game"
   online: "Online players"
   leftMessageQuarantineInTicks: 300
+nameColors:
+  - DARK_GREEN
+  - DARK_AQUA
+  - DARK_RED
+  - DARK_PURPLE
+  - GOLD
+  - GRAY
+  - BLUE
+  - GREEN
+  - AQUA
+  - RED
+  - LIGHT_PURPLE
+  - YELLOW

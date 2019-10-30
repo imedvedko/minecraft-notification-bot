@@ -220,6 +220,7 @@
                                     <goal>test-compile</goal>
                                 </goals>
                                 <configuration>
+                                    <skip>${maven.test.skip}</skip>
                                     <sourceDirs>
                                         <sourceDir>src/test/kotlin</sourceDir>
                                     </sourceDirs>

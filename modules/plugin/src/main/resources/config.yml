@@ -5,7 +5,7 @@ messenger.telegram:
   token: ""
   chats: [""]
 message:
-  started: "Server has been started"
+  started:
   joined: "joined the game"
   left: "left the game"
   online: "Online players"

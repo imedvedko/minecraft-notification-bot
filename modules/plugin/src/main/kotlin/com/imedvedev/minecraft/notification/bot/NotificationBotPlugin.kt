@@ -10,6 +10,10 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
 class NotificationBotPlugin : JavaPlugin() {
+    override fun onLoad() {
+        logger.info("${description.name} ${description.version} has been loaded")
+    }
+
     override fun onEnable() {
         val koin = startKoin { modules(listOf(
             module(true) { single<Plugin> { this@NotificationBotPlugin } },
@@ -18,10 +22,17 @@ class NotificationBotPlugin : JavaPlugin() {
             notificationEventListenerModule
         )) }.koin
 
-        config.getConfigurationSection("message")!!.getString("started").let {
-            koin.get<Messenger>().send("<b>$it</b>\n${description.name}: ${description.version}")
+        config.getConfigurationSection("message")!!.getString("started")?.let {
+            koin.get<Messenger>().send("<b>$it</b>" +
+                "\n<a href=\"${description.website}\">${description.name} ${description.version}</a>")
         }
 
         server.pluginManager.registerEvents(koin.get(), this)
+
+        logger.info("${description.name} ${description.version} has been enabled")
+    }
+
+    override fun onDisable() {
+        logger.info("${description.name} ${description.version} has been disabled")
     }
 }

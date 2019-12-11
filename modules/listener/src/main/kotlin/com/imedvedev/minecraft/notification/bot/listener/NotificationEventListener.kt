@@ -32,7 +32,7 @@ class NotificationEventListener(private val joinedMessage: String,
     fun onLogin(event: LoginEvent) {
         event.player.run {
             if (authenticatedPlayers.put(uniqueId, this) == null) {
-                TextComponent( "${pluginDescription.name} ${pluginDescription.version}" )
+                TextComponent("${pluginDescription.name} ${pluginDescription.version}")
                     .apply { clickEvent = ClickEvent(ClickEvent.Action.OPEN_URL, pluginDescription.website) }
                     .let { spigot().sendMessage(it) }
                 logger.info { "$name joined the game. " +

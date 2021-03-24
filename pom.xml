@@ -15,10 +15,10 @@
     </modules>
 
     <properties>
-        <maven.compiler.source>13</maven.compiler.source>
-        <maven.compiler.target>13</maven.compiler.target>
-        <kotlin.version>1.3.71</kotlin.version>
-        <kotlin.compiler.jvmTarget>12</kotlin.compiler.jvmTarget>
+        <maven.compiler.source>15</maven.compiler.source>
+        <maven.compiler.target>15</maven.compiler.target>
+        <kotlin.version>1.4.32</kotlin.version>
+        <kotlin.compiler.jvmTarget>15</kotlin.compiler.jvmTarget>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.test.skip>true</maven.test.skip>
     </properties>
@@ -51,7 +51,7 @@
             <dependency>
                 <groupId>org.koin</groupId>
                 <artifactId>koin-core</artifactId>
-                <version>2.1.5</version>
+                <version>2.2.2</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.jetbrains.kotlin</groupId>
@@ -74,8 +74,20 @@
             <dependency>
                 <groupId>com.github.pengrad</groupId>
                 <artifactId>java-telegram-bot-api</artifactId>
-                <version>4.7.0</version>
+                <version>5.1.0</version>
                 <exclusions>
+                    <exclusion>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-stdlib-jdk8</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-stdlib</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-stdlib-common</artifactId>
+                    </exclusion>
                     <exclusion>
                         <groupId>com.google.code.gson</groupId>
                         <artifactId>gson</artifactId>
@@ -92,7 +104,7 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.0</version>
                     <configuration>
                         <descriptorRefs>
                             <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -115,7 +127,9 @@
         <profile>
             <id>enforce</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <file>
+                    <exists>.</exists>
+                </file>
             </activation>
             <build>
                 <plugins>
@@ -145,14 +159,16 @@
         <profile>
             <id>detekt</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <file>
+                    <exists>.</exists>
+                </file>
             </activation>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>com.github.ozsie</groupId>
                         <artifactId>detekt-maven-plugin</artifactId>
-                        <version>1.7.0</version>
+                        <version>1.16.0</version>
                         <executions>
                             <execution>
                                 <phase>verify</phase>

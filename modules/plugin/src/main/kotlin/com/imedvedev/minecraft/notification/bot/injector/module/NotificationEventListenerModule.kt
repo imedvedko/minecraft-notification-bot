@@ -14,13 +14,11 @@ val notificationEventListenerModule = module(true) {
                 joinedMessage = messageConfig.getString("joined")!!,
                 leftMessage = messageConfig.getString("left")!!,
                 onlineMessage = messageConfig.getString("online")!!,
-                chatColors = config.getStringList("nameColors").map(ChatColor::valueOf),
+                chatColors = config.getStringList("name-colors").map(ChatColor::valueOf),
                 messenger = get(),
                 logger = plugin.logger,
-                quarantineScheduler = messageConfig.getLong("leftMessageQuarantineInTicks")
-                    .let<Long, (() -> Unit) -> Unit> { delay ->
-                        { task -> plugin.server.scheduler.runTaskLater(plugin, task, delay) }
-                    },
+                quarantineScheduler = messageConfig.getLong("left-message-quarantine-in-ticks")
+                    .let { delay -> { task -> plugin.server.scheduler.runTaskLater(plugin, task, delay) } },
                 pluginDescription = plugin.description
             )
         } }

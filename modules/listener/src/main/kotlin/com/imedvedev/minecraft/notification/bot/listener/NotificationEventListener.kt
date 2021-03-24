@@ -12,11 +12,8 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.PluginDescriptionFile
-import java.math.BigInteger
-import java.nio.ByteBuffer
 import java.util.logging.Level
 import java.util.logging.Logger
-import kotlin.collections.LinkedHashMap
 
 class NotificationEventListener(private val joinedMessage: String,
                                 private val leftMessage: String,
@@ -26,7 +23,7 @@ class NotificationEventListener(private val joinedMessage: String,
                                 private val logger: Logger,
                                 private val quarantineScheduler: (() -> Unit) -> Unit,
                                 private val pluginDescription: PluginDescriptionFile) : Listener {
-    private val authenticatedPlayers: AuthenticatedPlayers = LinkedHashMap()
+    private val authenticatedPlayers: AuthenticatedPlayers = AuthenticatedPlayers()
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onLogin(event: LoginEvent) {
@@ -86,13 +83,8 @@ class NotificationEventListener(private val joinedMessage: String,
     }
 
     private fun authenticatedPlayerNames(): String = authenticatedPlayers.toString {
-        ByteBuffer.allocate(16).apply {
-            uniqueId.apply {
-                putLong(mostSignificantBits)
-                putLong(leastSignificantBits)
-            }
-        }.array().let(::BigInteger).mod(chatColors.size.toBigInteger()).toInt().let(chatColors::get).let { color ->
-            "$color${ChatColor.stripColor(name)}${ChatColor.RESET}"
-        }
+        "$chatColor${ChatColor.stripColor(name)}${ChatColor.RESET}"
     }.let { "${ChatColor.GREEN}${ChatColor.stripColor(onlineMessage)}: ${ChatColor.RESET}$it" }
+
+    private val Player.chatColor: ChatColor get() = chatColors[uniqueId.leastSignificantBits.toInt() % chatColors.size]
 }

@@ -8,7 +8,6 @@
         <artifactId>vendor</artifactId>
         <groupId>com.imedvedev.minecraft.notification.bot</groupId>
         <version>1.9-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>telegram</artifactId>
@@ -22,6 +21,10 @@
         <dependency>
             <groupId>com.github.pengrad</groupId>
             <artifactId>java-telegram-bot-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-core</artifactId>
         </dependency>
     </dependencies>
 

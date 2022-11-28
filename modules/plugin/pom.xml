@@ -25,8 +25,8 @@
             <version>1.9-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.koin</groupId>
-            <artifactId>koin-core</artifactId>
+            <groupId>io.insert-koin</groupId>
+            <artifactId>koin-core-jvm</artifactId>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>

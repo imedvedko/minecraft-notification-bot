@@ -12,7 +12,6 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.PluginDescriptionFile
-import java.util.logging.Level
 import java.util.logging.Logger
 
 class NotificationEventListener(private val joinedMessage: String,
@@ -71,11 +70,9 @@ class NotificationEventListener(private val joinedMessage: String,
     }
 
     private fun Player.sendNotification(message: String) {
-        authenticatedPlayers.toString { "<i>$name</i>" }
-            .let { messenger.send("<b>$name $message</b>\n$onlineMessage: $it") }
-            .forEach { job -> job.exceptionally { exception -> logger.log(Level.WARNING, exception) {
-                "Server can not send the notification: \"$message\""
-            } } }
+        authenticatedPlayers.toString { "<i>$name</i>" }.let {
+            messenger.send("<b>$name $message</b>\n$onlineMessage: $it")
+        }
 
         authenticatedPlayerNames().let { authenticatedPlayerNames ->
             authenticatedPlayers.values.forEach { it.sendMessage(authenticatedPlayerNames) }

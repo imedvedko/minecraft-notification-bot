@@ -1,7 +1,6 @@
 package com.imedvedev.minecraft.notification.bot
 
 import com.imedvedev.minecraft.notification.bot.injector.module.notificationEventListenerModule
-import com.imedvedev.minecraft.notification.bot.injector.module.proxyModule
 import com.imedvedev.minecraft.notification.bot.injector.module.telegramMessengerModule
 import com.imedvedev.minecraft.notification.bot.messenger.Messenger
 import org.bukkit.plugin.Plugin
@@ -15,9 +14,10 @@ class NotificationBotPlugin : JavaPlugin() {
     }
 
     override fun onEnable() {
+        saveDefaultConfig();
+
         val koin = startKoin { modules(
             module(true) { single<Plugin> { this@NotificationBotPlugin } },
-            proxyModule,
             telegramMessengerModule,
             notificationEventListenerModule
         ) }.koin

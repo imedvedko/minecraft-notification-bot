@@ -1,7 +1,6 @@
 package com.imedvedev.minecraft.notification.bot
 
 import com.imedvedev.minecraft.notification.bot.injector.module.notificationEventListenerModule
-import com.imedvedev.minecraft.notification.bot.injector.module.proxyModule
 import com.imedvedev.minecraft.notification.bot.injector.module.telegramMessengerModule
 import com.imedvedev.minecraft.notification.bot.messenger.Messenger
 import org.bukkit.plugin.Plugin
@@ -11,16 +10,17 @@ import org.koin.dsl.module
 
 class NotificationBotPlugin : JavaPlugin() {
     override fun onLoad() {
-        logger.info("${description.name} ${description.version} has been loaded")
+        logger.info { "${description.name} ${description.version} has been loaded" }
     }
 
     override fun onEnable() {
-        val koin = startKoin { modules(listOf(
+        saveDefaultConfig();
+
+        val koin = startKoin { modules(
             module(true) { single<Plugin> { this@NotificationBotPlugin } },
-            proxyModule,
             telegramMessengerModule,
             notificationEventListenerModule
-        )) }.koin
+        ) }.koin
 
         config.getConfigurationSection("message")!!.getString("started")?.let {
             koin.get<Messenger>().send("<b>$it</b>" +
@@ -29,10 +29,10 @@ class NotificationBotPlugin : JavaPlugin() {
 
         server.pluginManager.registerEvents(koin.get(), this)
 
-        logger.info("${description.name} ${description.version} has been enabled")
+        logger.info { "${description.name} ${description.version} has been enabled" }
     }
 
     override fun onDisable() {
-        logger.info("${description.name} ${description.version} has been disabled")
+        logger.info { "${description.name} ${description.version} has been disabled" }
     }
 }

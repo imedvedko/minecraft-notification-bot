@@ -15,26 +15,34 @@
     </modules>
 
     <properties>
-        <maven.compiler.source>13</maven.compiler.source>
-        <maven.compiler.target>13</maven.compiler.target>
-        <kotlin.version>1.3.61</kotlin.version>
-        <kotlin.compiler.jvmTarget>12</kotlin.compiler.jvmTarget>
+        <java.version>17</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <kotlin.version>1.7.21</kotlin.version>
+        <kotlin.compiler.jvmTarget>${java.version}</kotlin.compiler.jvmTarget>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.test.skip>true</maven.test.skip>
+        <koin.version>3.2.2</koin.version>
+        <minecraft.version>1.19.2</minecraft.version>
+        <spigot.version>${minecraft.version}-R0.1-SNAPSHOT</spigot.version>
+        <authme.version>5.6.0-SNAPSHOT</authme.version>
+        <java-telegram-bot-api.version>6.3.0</java-telegram-bot-api.version>
+        <maven-enforcer-plugin.version>3.1.0</maven-enforcer-plugin.version>
+        <detekt.version>1.22.0</detekt.version>
+        <detekt-maven-plugin.version>${detekt.version}</detekt-maven-plugin.version>
+        <detekt.config>detekt-config.yml</detekt.config>
+        <kotlinx-coroutines.version>1.6.4</kotlinx-coroutines.version>
     </properties>
 
     <repositories>
+<!--        Spigot-->
         <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+<!--        AuthMeReloaded-->
         <repository>
             <id>codemc-repo</id>
             <url>https://repo.codemc.org/repository/maven-public/</url>
-        </repository>
-        <repository>
-            <id>JCenter</id>
-            <url>https://jcenter.bintray.com/</url>
         </repository>
     </repositories>
 
@@ -49,36 +57,77 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.koin</groupId>
-                <artifactId>koin-core</artifactId>
-                <version>2.0.1</version>
+                <groupId>io.insert-koin</groupId>
+                <artifactId>koin-core-jvm</artifactId>
+                <version>${koin.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.jetbrains.kotlin</groupId>
-                        <artifactId>kotlin-stdlib</artifactId>
+                        <artifactId>kotlin-stdlib-jdk8</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-stdlib-common</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.spigotmc</groupId>
                 <artifactId>spigot-api</artifactId>
-                <version>1.14.4-R0.1-SNAPSHOT</version>
+                <version>${spigot.version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>fr.xephi</groupId>
                 <artifactId>authme</artifactId>
-                <version>5.6.0-SNAPSHOT</version>
+                <version>${authme.version}</version>
                 <scope>provided</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.sk89q.worldguard</groupId>
+                        <artifactId>worldguard-bukkit</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>net.ess3</groupId>
+                        <artifactId>EssentialsGroupManager</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>com.github.pengrad</groupId>
                 <artifactId>java-telegram-bot-api</artifactId>
-                <version>4.4.0</version>
+                <version>${java-telegram-bot-api.version}</version>
                 <exclusions>
+                    <exclusion>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-stdlib-jdk8</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-stdlib</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-stdlib-common</artifactId>
+                    </exclusion>
                     <exclusion>
                         <groupId>com.google.code.gson</groupId>
                         <artifactId>gson</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlinx</groupId>
+                <artifactId>kotlinx-coroutines-core</artifactId>
+                <version>${kotlinx-coroutines.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-stdlib-jdk8</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-stdlib-common</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -92,7 +141,7 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.4.2</version>
                     <configuration>
                         <descriptorRefs>
                             <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -115,13 +164,15 @@
         <profile>
             <id>enforce</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <file>
+                    <exists>.</exists>
+                </file>
             </activation>
             <build>
                 <plugins>
                     <plugin>
                         <artifactId>maven-enforcer-plugin</artifactId>
-                        <version>3.0.0-M3</version>
+                        <version>${maven-enforcer-plugin.version}</version>
                         <executions>
                             <execution>
                                 <goals>
@@ -145,14 +196,16 @@
         <profile>
             <id>detekt</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <file>
+                    <exists>.</exists>
+                </file>
             </activation>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>com.github.ozsie</groupId>
                         <artifactId>detekt-maven-plugin</artifactId>
-                        <version>1.1.1</version>
+                        <version>${detekt-maven-plugin.version}</version>
                         <executions>
                             <execution>
                                 <phase>verify</phase>
@@ -161,9 +214,13 @@
                                 </goals>
                             </execution>
                         </executions>
-                        <configuration>
-                            <config>detekt-config.yml</config>
-                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>io.gitlab.arturbosch.detekt</groupId>
+                                <artifactId>detekt-formatting</artifactId>
+                                <version>${detekt.version}</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
                 </plugins>
             </build>

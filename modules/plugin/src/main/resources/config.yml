@@ -1,16 +1,13 @@
-proxy:
-  host: "127.0.0.1"
-  port: 9050
 messenger.telegram:
-  token: ""
-  chats: [""]
+  token:
+  chats: []
 message:
   started:
   joined: "joined the game"
   left: "left the game"
   online: "Online players"
-  leftMessageQuarantineInTicks: 300
-nameColors:
+  left-message-quarantine-in-ticks: 300
+name-colors:
   - DARK_GREEN
   - DARK_AQUA
   - DARK_RED

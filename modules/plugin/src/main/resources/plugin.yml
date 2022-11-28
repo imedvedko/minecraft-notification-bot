@@ -1,7 +1,7 @@
 name: notification-bot-plugin
 version: ${project.version}
 website: https://github.com/imedvedko/minecraft-notification-bot
-api-version: 1.15
+api-version: 1.19
 main: com.imedvedev.minecraft.notification.bot.NotificationBotPlugin
 depend:
   - AuthMe

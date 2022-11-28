@@ -31,6 +31,7 @@
         <detekt-maven-plugin.version>${detekt.version}</detekt-maven-plugin.version>
         <detekt.config>detekt-config.yml</detekt.config>
         <kotlinx-coroutines.version>1.6.4</kotlinx-coroutines.version>
+        <generateBackupPoms>false</generateBackupPoms>
     </properties>
 
     <repositories>

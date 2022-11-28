@@ -1,5 +1,5 @@
 # Minecraft Notification Bot
-[![Build Status](https://travis-ci.com/imedvedko/minecraft-notification-bot.svg?branch=master)](https://travis-ci.com/imedvedko/minecraft-notification-bot)
+[![Build Status](https://app.travis-ci.com/imedvedko/minecraft-notification-bot.svg?branch=master)](https://app.travis-ci.com/imedvedko/minecraft-notification-bot)
 
 It is a minecraft server plugin which sends list of online players into telegram messenger when login/logout events happen.
 

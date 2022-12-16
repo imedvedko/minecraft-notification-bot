@@ -83,5 +83,5 @@ class NotificationEventListener(private val joinedMessage: String,
         "$chatColor${ChatColor.stripColor(name)}${ChatColor.RESET}"
     }.let { "${ChatColor.GREEN}${ChatColor.stripColor(onlineMessage)}: ${ChatColor.RESET}$it" }
 
-    private val Player.chatColor: ChatColor get() = chatColors[uniqueId.leastSignificantBits.toInt() % chatColors.size]
+    private val Player.chatColor: ChatColor get() = chatColors[uniqueId.leastSignificantBits.mod(chatColors.size)]
 }
